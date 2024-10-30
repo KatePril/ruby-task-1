@@ -12,10 +12,6 @@ class Student
     self.class.add_student(self)
   end
 
-  def eql?(other)
-    @name == other.name && @surname == other.surname && @date_of_birth == other.date_of_birth
-  end
-
   def calculate_age
     today = Date.today
     age = today.year - @date_of_birth.year
@@ -52,6 +48,10 @@ class Student
         result << student if student.name == name
     end
     result
+  end
+
+  def eql?(other)
+    @name == other.name && @surname == other.surname && @date_of_birth == other.date_of_birth
   end
 
   def to_s
