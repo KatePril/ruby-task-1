@@ -1,24 +1,15 @@
-# frozen_string_literal: true
 require 'date'
 
 class Student
   @@students = []
-  attr_reader :name
-  attr_reader :surname
-  attr_reader :date_of_birth
+  attr_reader :name, :surname, :date_of_birth
 
   def initialize(name, surname, date_of_birth)
     @name = name
     @surname = surname
-
-    if date_of_birth > Date.today
-      raise ArgumentError,'you entered a future date'
-    end
-
+    raise ArgumentError,'you entered a future date' if date_of_birth > Date.today
     @date_of_birth = date_of_birth
-
     self.class.add_student(self)
-
   end
 
   def eql?(other)
@@ -27,29 +18,20 @@ class Student
 
   def calculate_age
     today = Date.today
-
     age = today.year - @date_of_birth.year
-    if today < @date_of_birth.next_year(age)
-      age -= 1
-    end
+    age -= 1 if today < @date_of_birth.next_year(age)
     age
   end
 
   def self.add_student(new_student)
     unique = true
-    @@students.each { |student|
-
+    @@students.each do |student|
       if student.eql? new_student
-
         unique = false
         break
       end
-
-    }
-
-    if unique
-      @@students << new_student
     end
+    @@students << new_student if unique
   end
 
   def self.remove_student(student)
@@ -58,29 +40,17 @@ class Student
 
   def self.get_students_by_age(age)
     result = []
-
     @@students.each do |student|
-
-      if student.calculate_age == age
-        result << student
-      end
-
+        result << student if student.calculate_age == age
     end
-
     result
   end
 
   def self.get_student_by_name(name)
     result = []
-
     @@students.each do |student|
-
-      if student.name == name
-        result << student
-      end
-
+        result << student if student.name == name
     end
-
     result
   end
 
