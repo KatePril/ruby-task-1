@@ -25,6 +25,16 @@ class Student
     @name == other.name && @surname == other.surname && @date_of_birth == other.date_of_birth
   end
 
+  def calculate_age
+    today = Date.today
+
+    age = today.year - @date_of_birth.year
+    if today < @date_of_birth.next_year(age)
+      age -= 1
+    end
+    age
+  end
+
   def self.add_student(new_student)
     unique = true
     @@students.each { |student|
@@ -41,16 +51,45 @@ class Student
       @@students << new_student
     end
   end
+
+  def self.remove_student(student)
+    @@students.delete(student)
+  end
+
+  def self.get_students_by_age(age)
+    result = []
+
+    @@students.each do |student|
+
+      if student.calculate_age == age
+        result << student
+      end
+
+    end
+
+    result
+  end
+
+  def self.get_student_by_name(name)
+    result = []
+
+    @@students.each do |student|
+
+      if student.name == name
+        result << student
+      end
+
+    end
+
+    result
+  end
+
+  def to_s
+    "#{@name} #{@surname}, #{@date_of_birth}"
+  end
+
   def self.students
     @@students
   end
 
 end
-
-lucy = Student.new("Lucy", "Evans", Date.new(2000, 3, 14))
-lucy1 = Student.new("Lucy", "Evans", Date.new(2000, 3, 14))
-
-Student.add_student(Student.new("Emma", "Evans", Date.new(2010, 3, 14)))
-
-p lucy.eql? lucy1
-p Student.students
